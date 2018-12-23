@@ -6,6 +6,7 @@ CSERVICE_PATH ?= cservice
 SKYNET_BUILD_PATH ?= .
 
 CFLAGS = -g -O2 -Wall -I$(LUA_INC) $(MYCFLAGS)
+CXXFLAGS =  -std=c++11 -stdlib=libc++
 # CFLAGS += -DUSE_PTHREAD_LOCK
 
 # lua
@@ -15,7 +16,7 @@ LUA_LIB ?= $(LUA_STATICLIB)
 LUA_INC ?= 3rd/lua
 
 $(LUA_STATICLIB) :
-	cd 3rd/lua && $(MAKE) CC='$(CC) -std=gnu99' $(PLAT)
+	cd 3rd/lua && $(MAKE) CC='$(CC) -std=c++11 -stdlib=libc++'  $(PLAT)
 
 # jemalloc 
 
@@ -47,7 +48,7 @@ update3rd :
 CSERVICE = snlua logger gate harbor
 LUA_CLIB = skynet \
   client \
-  bson md5 sproto lpeg ffi ffi_test
+  bson md5 sproto lpeg ffi ffi_test lfb
 
 LUA_CLIB_SKYNET = \
   lua-skynet.c lua-seri.c \
@@ -115,6 +116,10 @@ $(LUA_CLIB_PATH)/ffi.so : 3rd/ffi/call.c 3rd/ffi/ffi.c 3rd/ffi/ctype.c 3rd/ffi/p
 
 $(LUA_CLIB_PATH)/ffi_test.so : 3rd/ffi/test.c | $(LUA_CLIB_PATH)
 	$(CC) $(CFLAGS) $(SHARED) -I3rd/ffi_test $^ -o $@ 
+
+
+$(LUA_CLIB_PATH)/lfb.so : 3rd/lfb/src/lflatbuffers_decode.cpp 3rd/lfb/src/lflatbuffers_encode.cpp 3rd/lfb/src/lflatbuffers.cpp  3rd/lfb/src/flatbuffers/reflection.cpp 3rd/lfb/src/flatbuffers/util.cpp | $(LUA_CLIB_PATH)
+	$(CXX) $(CXXFLAGS) $(CFLAGS) $(SHARED) -I3rd/lfb/src -I3rd/lfb/third_party/flatbuffers/include  -I3rd/lua $^ -o $@ 
 
 clean :
 	rm -f $(SKYNET_BUILD_PATH)/skynet $(CSERVICE_PATH)/*.so $(LUA_CLIB_PATH)/*.so
