@@ -1,3 +1,6 @@
 [submodule "3rd/jemalloc"]
 	path = 3rd/jemalloc
 	url = https://github.com/jemalloc/jemalloc.git
+[submodule "3rd/ffi"]
+	path = 3rd/ffi
+	url = https://github.com/jmckaskill/luaffi.git
