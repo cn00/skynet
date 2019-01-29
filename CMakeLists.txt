@@ -2,15 +2,37 @@ cmake_minimum_required(VERSION 3.8)
 project(skynet)
 
 set(CMAKE_C_STANDARD 99)
+set(CMAKE_CXX_STANDARD 11)
 
-set(CMAKE_C_FLAGS  " -O2 -Wall" )
+set(CMAKE_C_FLAGS  " -O2 -Wall -DNOUSE_JEMALLOC" )
 
+set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/bin")#set executable output path
+set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
+macro(source_group_by_dir proj_dir source_files)
+    if(MSVC OR APPLE)
+        get_filename_component(sgbd_cur_dir ${proj_dir} ABSOLUTE)
+        foreach(sgbd_file ${${source_files}})
+			get_filename_component(sgbd_abs_file ${sgbd_file} ABSOLUTE)
+            file(RELATIVE_PATH sgbd_fpath ${sgbd_cur_dir} ${sgbd_abs_file})
+            string(REGEX REPLACE "\(.*\)/.*" \\1 sgbd_group_name ${sgbd_fpath})
+            string(COMPARE EQUAL ${sgbd_fpath} ${sgbd_group_name} sgbd_nogroup)
+            string(REPLACE "/" "\\" sgbd_group_name ${sgbd_group_name})
+            if(sgbd_nogroup)
+                set(sgbd_group_name "\\")
+            endif(sgbd_nogroup)
+            source_group(${sgbd_group_name} FILES ${sgbd_file})
+        endforeach(sgbd_file)
+    endif(MSVC OR APPLE)
+endmacro(source_group_by_dir)
 
 # lua.so
 add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/lua )
+
+add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/p7zip )
+add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/lfb )
 
 #add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/jemalloc)
 

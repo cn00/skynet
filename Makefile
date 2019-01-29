@@ -16,7 +16,7 @@ LUA_LIB ?= $(LUA_STATICLIB)
 LUA_INC ?= 3rd/lua
 
 $(LUA_STATICLIB) :
-	cd 3rd/lua && $(MAKE) CC='$(CC) -std=c++11 -stdlib=libc++'  $(PLAT)
+	cd 3rd/lua && $(MAKE) CC='$(CC) -std=c++11 -stdlib=libc++  -fexceptions -DNDEBUG -D_REENTRANT -DENV_UNIX -DBREAK_HANDLER -DUNICODE -D_UNICODE -DUNIX_USE_WIN_FILE -fPIC' $(PLAT)
 
 # jemalloc 
 
