@@ -9,3 +9,6 @@
 *.so
 *.dSYM
 .DS_Store
+
+bin
+CMakeFiles

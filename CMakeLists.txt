@@ -4,12 +4,17 @@ project(skynet)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 11)
 
-set(CMAKE_C_FLAGS  " -O2 -Wall -DNOUSE_JEMALLOC" )
+# set(CMAKE_C_FLAGS  " -O2 -Wall -DNOUSE_JEMALLOC" )
+set(CMAKE_C_FLAGS  " -Wall" )
+set(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -dynamiclib -Wl,-undefined,dynamic_lookup -Wl, -DNOUSE_JEMALLOC" )
 
 set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/bin")#set executable output path
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
+
+set(SKYNET_EXE "skynet_exe")
+set(SKYNET_LIB "skynet")
 
 macro(source_group_by_dir proj_dir source_files)
     if(MSVC OR APPLE)
@@ -28,11 +33,23 @@ macro(source_group_by_dir proj_dir source_files)
     endif(MSVC OR APPLE)
 endmacro(source_group_by_dir)
 
-# lua.so
-add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/lua )
+add_subdirectory(${PROJECT_SOURCE_DIR}/3rd)
 
-add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/p7zip )
-add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/lfb )
+# lua
+file(GLOB_RECURSE lua_SRCS 
+        ./*.lua
+        app/null.c
+)
+add_library(luasrc ${lua_SRCS})
+source_group_by_dir(${CMAKE_CURRENT_SOURCE_DIR} lua_SRCS)
+
+
+# lua.so
+add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/lua)
+add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/luasocket)
+
+add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/p7zip)
+add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/lfb)
 
 #add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/jemalloc)
 
@@ -40,8 +57,8 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/lfb )
 add_subdirectory(${PROJECT_SOURCE_DIR}/service-src)
 
 # executabale myskynet
-add_subdirectory(${PROJECT_SOURCE_DIR}/skynet-src )
+add_subdirectory(${PROJECT_SOURCE_DIR}/skynet-src)
 
 # client.so  bson.so  md5.so  sproto.so  lpeg.so  skynet.so
-add_subdirectory(${PROJECT_SOURCE_DIR}/lualib-src )
+add_subdirectory(${PROJECT_SOURCE_DIR}/lualib-src)
 

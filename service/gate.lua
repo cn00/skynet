@@ -5,6 +5,12 @@ local watchdog
 local connection = {}	-- fd -> connection : { fd , client, agent , ip, mode }
 local forwarding = {}	-- agent -> connection
 
+
+local logtag = "[gate]"
+local print = function ( ... )
+    _G.print(logtag, ...)
+end
+
 skynet.register_protocol {
 	name = "client",
 	id = skynet.PTYPE_CLIENT,
@@ -37,6 +43,8 @@ function handler.connect(fd, addr)
 	}
 	connection[fd] = c
 	skynet.send(watchdog, "lua", "socket", "open", fd, addr)
+
+	print("connect", fd, addr)
 end
 
 local function unforward(c)
@@ -57,6 +65,7 @@ end
 
 function handler.disconnect(fd)
 	close_fd(fd)
+	print("close_fd", fd)
 	skynet.send(watchdog, "lua", "socket", "close", fd)
 end
 

@@ -10,12 +10,11 @@ include_directories(
 )
 add_definitions(-fPIC)
 
-set(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -Wl,-E -DNOUSE_JEMALLOC" )
-
-# lualib.so
-file(GLOB_RECURSE lualib_SRC 
-        ./*.h
-        ./*.c
+# skynet.so
+file(GLOB_RECURSE lualib_SRC
+        ./lsha1.c
+        ./lua-*.h
+        ./lua-*.c
         ../skynet-src/*.h
         ../skynet-src/*.c
 )
@@ -27,45 +26,31 @@ IF(NOT JEMALLOC_LIB)
 ENDIF(NOT JEMALLOC_LIB)
 message(STATUS "jemalloc_pic found in " ${JEMALLOC_LIB})
 
-add_library(lualib SHARED ${lualib_SRC} )
-target_link_libraries(lualib lua pthread m dl)
-target_link_libraries(lualib ${JEMALLOC_LIB})
-
-# set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/luaclib)
+add_library(${SKYNET_LIB} SHARED ${lualib_SRC} )
+target_link_libraries(${SKYNET_LIB} lua pthread m dl)
+target_link_libraries(${SKYNET_LIB} ${JEMALLOC_LIB})
 
 #client.so
-add_library(client SHARED
+set(client_SRC 
         lua-clientsocket.c
         lua-crypt.c
-        lsha1.c)
-target_link_libraries(client lualib)
+        lsha1.c
+)
+source_group_by_dir(${CMAKE_CURRENT_SOURCE_DIR} client_SRC)
+add_library(client SHARED ${client_SRC})
+target_link_libraries(client ${SKYNET_LIB})
 
 #bson.so
 add_library(bson SHARED lua-bson.c )
-target_link_libraries(bson lualib)
+target_link_libraries(bson ${SKYNET_LIB})
 
-
-#md5.so
-file(GLOB_RECURSE md5_SRC 
-        ../3rd/lua-md5/*.h
-        ../3rd/lua-md5/*.c
-)
-add_library(md5 SHARED ${md5_SRC})
-target_link_libraries(md5 lualib)
 
 #sproto.so
 file(GLOB_RECURSE sproto_SRC 
         sproto/*.h
         sproto/*.c
 )
+source_group_by_dir(${CMAKE_CURRENT_SOURCE_DIR} sproto_SRC)
 add_library(sproto SHARED ${sproto_SRC})
-target_link_libraries(sproto lualib)
+target_link_libraries(sproto ${SKYNET_LIB})
 
-
-# lpeg.so
-file(GLOB_RECURSE lpeg_SRC 
-        ../3rd/lpeg/[^.]*.h
-        ../3rd/lpeg/[^.]*.c
-)
-add_library(lpeg SHARED ${lpeg_SRC})
-target_link_libraries(lpeg lualib)
