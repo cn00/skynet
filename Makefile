@@ -131,7 +131,8 @@ $(LUA_CLIB_PATH)/lfb.so : 3rd/lfb/src/lflatbuffers_decode.cpp 3rd/lfb/src/lflatb
 	$(CXX) $(CXXFLAGS) $(CFLAGS) $(SHARED) -I3rd/lfb/src -I3rd/lfb/third_party/flatbuffers/include  -I3rd/lua $^ -o $@ 
 
 clean :
-	rm -f $(SKYNET_BUILD_PATH)/skynet $(CSERVICE_PATH)/*.so $(LUA_CLIB_PATH)/*.so
+	rm -f $(SKYNET_BUILD_PATH)/skynet $(CSERVICE_PATH)/*.so $(LUA_CLIB_PATH)/*.so && \
+  rm -rf $(SKYNET_BUILD_PATH)/*.dSYM $(CSERVICE_PATH)/*.dSYM $(LUA_CLIB_PATH)/*.dSYM
 
 cleanall: clean
 ifneq (,$(wildcard 3rd/jemalloc/Makefile))
