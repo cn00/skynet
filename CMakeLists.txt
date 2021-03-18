@@ -8,13 +8,13 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_C_FLAGS  " -Wall" )
 set(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -dynamiclib -Wl,-undefined,dynamic_lookup -Wl, -DNOUSE_JEMALLOC" )
 
-set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/bin")#set executable output path
-set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin) #set executable output path
+set(LIBRARY_OUTPUT_PATH    ${CMAKE_BINARY_DIR}/bin)
 
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
-set(SKYNET_EXE "skynet_exe")
-set(SKYNET_LIB "skynet")
+set(SKYNET_EXE "skynet")
+set(SKYNET_LIB "libskynet")
 
 macro(source_group_by_dir proj_dir source_files)
     if(MSVC OR APPLE)
@@ -62,3 +62,9 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/skynet-src)
 # client.so  bson.so  md5.so  sproto.so  lpeg.so  skynet.so
 add_subdirectory(${PROJECT_SOURCE_DIR}/lualib-src)
 
+SET(CMAKE_INSTALL_PREFIX ".")
+
+# message("DESTINATION ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}")
+# file(COPY examples app lualib service sharelua
+#     DESTINATION ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}
+# )

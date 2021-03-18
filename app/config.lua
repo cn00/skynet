@@ -11,9 +11,4 @@ start = "main"	-- main script
 bootstrap = "snlua bootstrap"	-- The service for bootstrap
 standalone = "0.0.0.0:2013"
 -- snax_interface_g = "snax_g"
-cpath = "./?.so;./?.dylib;"
-    .. root .. "cservice/?.so;" 
-    .. root .. "cservice/?.dylib;"
-    .. root .. "bin/Debug/?.so;"
-    .. root .. "bin/Debug/?.dylib"
 -- daemon = "./skynet.pid"

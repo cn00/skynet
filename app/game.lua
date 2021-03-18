@@ -13,7 +13,7 @@ end
 
 local lfb = require("lfb")()
 print("lfb", lfb)
-local protodir = config.root .. "proto/bfbs"
+local protodir = config.root .. "/proto/bfbs"
 local protopath = protodir .. "/proto.bfbs.txt"
 lfb:load_bfbs_path(protodir, "bfbs.txt")
 

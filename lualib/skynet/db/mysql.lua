@@ -260,6 +260,9 @@ local function _recv_packet(self, sock)
     return data, typ
 end
 
+---_from_length_coded_bin
+---@param data string
+---@param pos number
 local function _from_length_coded_bin(data, pos)
     local first = strbyte(data, pos)
 
@@ -309,6 +312,10 @@ local function _set_length_coded_bin(n)
     return strpack("<BI8", 0xfe, n)
 end
 
+---_from_length_coded_str
+---@param data string
+---@param pos number
+---@return string, number
 local function _from_length_coded_str(data, pos)
     local len
     len, pos = _from_length_coded_bin(data, pos)
@@ -392,6 +399,10 @@ local function _parse_field_packet(data)
     return col
 end
 
+---_parse_row_data_packet
+---@param data table
+---@param cols number
+---@param compact boolean
 local function _parse_row_data_packet(data, cols, compact)
     local value, col, conv
     local pos = 1

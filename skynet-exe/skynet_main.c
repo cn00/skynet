@@ -12,6 +12,7 @@
 #include <lauxlib.h>
 #include <signal.h>
 #include <assert.h>
+#include<unistd.h>
 
 static int
 optint(const char *key, int opt) {
@@ -116,6 +117,19 @@ static const char * load_config = "\
 
 int
 main(int argc, char *argv[]) {
+	int lasti = 0;
+	for (char* i = argv[0]; *i != 0; ++i) {
+		if (*i == '/') {
+			lasti = (int)i - (int)argv[0];
+		}
+	}
+	char buf[128];
+	memcpy(buf, argv[0], lasti);
+	buf[lasti] = 0;
+	chdir(buf);
+
+	printf("buf:%s\npwd:%s\n", buf, getcwd(buf, 127));
+
 	const char * config_file = NULL ;
 	if (argc > 1) {
 		config_file = argv[1];
@@ -153,7 +167,7 @@ main(int argc, char *argv[]) {
 	_init_env(L);
 
 	config.thread =  optint("thread",8);
-	config.module_path = optstring("cpath","./cservice/?.so");
+	config.module_path = optstring("lua_cpath","./cservice/?.so");
 	config.harbor = optint("harbor", 1);
 	config.bootstrap = optstring("bootstrap","snlua bootstrap");
 	config.daemon = optstring("daemon", NULL);
