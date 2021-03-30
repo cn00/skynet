@@ -4,3 +4,6 @@
 [submodule "3rd/ffi"]
 	path = 3rd/ffi
 	url = https://github.com/jmckaskill/luaffi.git
+[submodule "3rd/lua"]
+	path = 3rd/lua
+	url = git@github.com:lua/lua.git

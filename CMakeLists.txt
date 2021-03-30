@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 # set(CMAKE_C_FLAGS  " -O2 -Wall -DNOUSE_JEMALLOC" )
 set(CMAKE_C_FLAGS  " -Wall" )
-set(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -dynamiclib -Wl,-undefined,dynamic_lookup -Wl, -DNOUSE_JEMALLOC" )
+set(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -dynamiclib -Wl,-undefined,dynamic_lookup -Wl, -DNOUSE_JEMALLOC -D__STDC_NO_ATOMICS__" )
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin) #set executable output path
 set(LIBRARY_OUTPUT_PATH    ${CMAKE_BINARY_DIR}/bin)
@@ -48,10 +48,10 @@ source_group_by_dir(${CMAKE_CURRENT_SOURCE_DIR} lua_SRCS)
 add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/lua)
 add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/luasocket)
 
-add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/p7zip)
-add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/lfb)
+# add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/p7zip)
+# add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/lfb)
 
-#add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/jemalloc)
+# add_subdirectory(${PROJECT_SOURCE_DIR}/3rd/jemalloc)
 
 # gate.so harbor.so logger.so snlua.so
 add_subdirectory(${PROJECT_SOURCE_DIR}/service-src)

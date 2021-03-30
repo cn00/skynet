@@ -14,7 +14,7 @@ include_directories(
 add_definitions(-fPIC)
 
 add_library(snlua SHARED service_snlua.c)
-target_link_libraries(snlua lua ${SKYNET_LIB})
+target_link_libraries(snlua liblua ${SKYNET_LIB})
 
 add_library(logger SHARED service_logger.c)
 target_link_libraries(logger ${SKYNET_LIB})

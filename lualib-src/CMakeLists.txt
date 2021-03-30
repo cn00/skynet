@@ -27,7 +27,7 @@ ENDIF(NOT JEMALLOC_LIB)
 message(STATUS "jemalloc_pic found in " ${JEMALLOC_LIB})
 
 add_library(${SKYNET_LIB} SHARED ${lualib_SRC} )
-target_link_libraries(${SKYNET_LIB} lua pthread m dl)
+target_link_libraries(${SKYNET_LIB} liblua pthread m dl)
 target_link_libraries(${SKYNET_LIB} ${JEMALLOC_LIB})
 
 #client.so

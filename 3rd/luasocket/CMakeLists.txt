@@ -21,4 +21,4 @@ add_definitions(-DLUA_USE_LINUX -Wl,-E -ldl -lreadline)
 
 source_group_by_dir(${CMAKE_CURRENT_SOURCE_DIR} luasocket_SRCS)
 add_library(socket SHARED ${luasocket_SRCS})
-target_link_libraries(socket lua)
+target_link_libraries(socket liblua)
